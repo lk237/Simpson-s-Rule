@@ -1,28 +1,48 @@
-import math                                       # import python math functions
+# cs 3308 
+# groupe name: Leonel Kachie Takoudjou, Alessio Naji-Sepasgozar, Minh Anh Thai
 
-def integralf(x):                                 # Integral function declaration for f(x)
-    return math.sqrt(1 - (2/3) * math.sin(x)**2)  # Integral f(x)
+# Import the math module for mathematical functions
+import math
 
-def simpsons_rule(f, a, b, n):                     # Simpsons function with param f - function, a & b = interval, n - subinterval
-    h = (b-a) / n                                  # calculates h = width of sub interval using end points
-    s = f(a) + f(b)                                # initialize sum with values of f at endpoints 
+# Define the function f1(alpha) for the elliptic integral
+def f1(alpha):
+  # Return the value of the function at point alpha
+  return 8*math.sqrt(3) * math.sqrt(1 - (2/3)*math.sin(alpha)**2)
 
-    for i in range(1,n,2):                         # odd index Loops for summation aspect of Simpson's rule 
-        s += 4 * f(a + i * h)                      # f(a + i * h) caclculates the x coordinate for odd number terms on subinterval, multiplied by 4 then added to s
-    for i in range(2, n-1, 2):                     # even index Loops for summation aspect of Simpson's rule 
-        s += 2 * f(a + i * h)                      # f(a + i * h) caclculates the x coordinate for even number terms on subinterval, multiplied by 2 then added to s
+# Define the function f2(x) for the variable force
+def f2(x):
+  # Return the value of the function at point x
+  return 100*x*math.sqrt(125 - x**3)
 
-    return s * (h/3)                               # final integral approx, simpsons formula
+# Define a function to implement Simpson's Rule
+def simpson(f, a, b, n):
+  # Calculate the step size h
+  h = (b - a) / n
+  
+  # Initialize the sum with the function values at the endpoints
+  sum = f(a) + f(b)
+  
+  # Iterate over the interior points and add their function values to the sum
+  # with appropriate weights (4 for odd indices, 2 for even indices)
+  for i in range(1, n, 2):
+    sum += 4 * f(a + i*h)
+  for i in range(2, n-1, 2):
+    sum += 2 * f(a + i*h)
+  
+  # Return the approximate integral value
+  return sum * h / 3
 
-lower_bound = 0                                    # lower bound delcaration
-upper_bound = math.pi/2                            # upper bound delcaration
+# Approximate the circumference of an ellipse 
+a = 0
+b = math.pi/2
+n = 100
 
-n = 100                                            # subinterval declaration
+# Approximate the circumference of an ellipse using Simpson's Rule
+print("the circumference of the ellipses is approximatley:", simpson(f1, a, b, n))
 
-
-
-integral_value = simpsons_rule(integralf, lower_bound, upper_bound, n) # intergral value calculated using simspsons rule
-
-circumference = 8 * math.sqrt(3) * integral_value  # Circumfrence of elipses formula multipled by integral value found aoboce 
-
-print (f"the circumference of the ellipses is approximatley {circumference}") # Output print state ment 
+# Approximate the work done 
+a = 0
+b = 5
+n = 100
+# Approximate the work done using Simpson's Rule
+print("Simpson's Rule:", simpson(f2, a, b, n))
